@@ -36,7 +36,7 @@ jobs:
       env:
         SECRET: ${{ secrets.Greeting }}
       run: |
-        echo "Job 2 running on UAT environment"
+        echo "Job 2 running on user acceptance testing environment"
         if [ $SECRET = "UAT" ]; then echo "Hello User Acceptence Test team!"; fi
     
   job3:
