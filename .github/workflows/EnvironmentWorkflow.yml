@@ -1,0 +1,68 @@
+name: EnvironmentWorkflow
+
+on:
+  push:
+    branches: [ main ]
+  
+  pull_request:
+    branches: [ main ]
+  
+  workflow_dispatch:
+  
+
+jobs:
+
+  job1:
+    runs-on: ubuntu-latest
+    environment: Development
+    
+    steps:
+    
+    - name: Send greeting1
+      env:
+        SECRET: ${{ secrets.Greeting }}
+      run: |
+        echo "Job 1 running on development environment"
+        if [ $SECRET = "DEV" ]; then echo "Hello Development Team!"; fi
+    
+  job2:
+    runs-on: ubuntu-latest
+    environment: UAT
+    needs:
+      - job1
+    
+    steps:
+    - name: Send greeting2
+      env:
+        SECRET: ${{ secrets.Greeting }}
+      run: |
+        echo "Job 2 running on UAT environment"
+        if [ $SECRET = "UAT" ]; then echo "Hello User Acceptence Test team!"; fi
+    
+  job3:
+    runs-on: ubuntu-latest
+    needs:
+      - job2
+    
+    steps:
+    - name: Send greetings3
+      env:
+        SECRET: ${{ secrets.Greeting }}
+      run: |
+        echo "Job 3 running using global variables"
+        if [ $SECRET = "GLOBAL" ]; then echo "Hello to global!"; fi
+    
+  job4:
+    runs-on: ubuntu-latest
+    environment: Production
+    needs:
+      - job2
+    
+    steps:
+    - name: Send greetings4
+      env:
+        SECRET: ${{ secrets.Greeting }}
+      run: |
+        echo "Job 4 running on production environment"
+        if [ $SECRET: = "PROD" ]; then echo "Prod"; fi
+      
